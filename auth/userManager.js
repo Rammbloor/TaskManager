@@ -27,13 +27,14 @@ class Users {
 class UserManager {
     constructor() {
         this.users = {}// База данных пользователей в виде объекта
+        this.nextId = 1
         this.filePath = path.join(__dirname, 'users.json')//Файл для сохранения юзеров
         this.loadUsers()//загружаем юзеров при запуске
     }
 
 // Метод для сохраения пользователей в файл
     saveUsers() {
-        fs.writeFileSync(this.filePath, JSON.stringify(this.users, null, 2), 'utf-8')
+        fs.writeFileSync(this.filePath, JSON.stringify({nextId: this.nextId, users: this.users}, null, 2), 'utf-8');
     }
 
     // Метод для загрузки пользователей из файла
@@ -41,9 +42,11 @@ class UserManager {
         if (fs.existsSync(this.filePath)) {
             const data = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
             this.users = {};
-
-            for (const [login, userData] of Object.entries(data)) {
-                this.users[login] = new Users(userData); // Создаем экземпляр Users для каждого пользователя
+            this.nextId = data.nextId || 1;
+            if (data && data.users) {
+                for (const [login, userData] of Object.entries(data.users)) {
+                    this.users[login] = new Users(userData); // Создаем экземпляр Users для каждого пользователя
+                }
             }
         }
     }
@@ -54,11 +57,15 @@ class UserManager {
             throw new Error('Пользователь с таким логином уже существует');
         }
 
+        while (this.users.hasOwnProperty(this.nextId)) {
+            this.nextId++;
+        }
         // Создаем экземпляр пользователя
-        const user = new Users(userOptions);
+        const user = new Users({id: this.nextId++, ...userOptions})
         await user.hashPassword(); // Хешируем пароль
-        this.users[user.login] = user; // Сохраняем пользователя в "базе данных"
+        this.users[user.id] = user; // Сохраняем пользователя в "базе данных"
         this.saveUsers()//Сохраняем юзера в файл
+        return user
     }
 
     // Проверка существования пользователя по логину
