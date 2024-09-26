@@ -1,0 +1,40 @@
+{
+  "nextId": 6,
+  "tasks": {
+    "1": {
+      "id": 1,
+      "title": "1 задача",
+      "description": "проверка правильности удаления задач",
+      "status": "pending",
+      "owner": "ivan"
+    },
+    "2": {
+      "id": 2,
+      "title": "2 задача",
+      "description": "проверка правильности удаления задач",
+      "status": "pending",
+      "owner": "ivan"
+    },
+    "3": {
+      "id": 3,
+      "title": "3 задача",
+      "description": "проверка правильности удаления задач",
+      "status": "pending",
+      "owner": "ivan"
+    },
+    "4": {
+      "id": 4,
+      "title": "newTask",
+      "description": "проверка правильности удаления задач",
+      "status": "pending",
+      "owner": "Фолс123"
+    },
+    "5": {
+      "id": 5,
+      "title": " задача",
+      "description": "добавлением коммента",
+      "status": "pending",
+      "owner": "iwe3"
+    }
+  }
+}
