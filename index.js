@@ -14,8 +14,34 @@ app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
 app.use(commentRoutes)
 
-//Порт на котором работает сервер
 const PORT = 3000
+
+
+function sendData() {
+    const data = {
+        message: "Это сообщение отправляется каждые 50 секунд"
+    };
+
+    fetch('https://your-api-endpoint.com/your-endpoint', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Успех:', data);
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
+}
+
+// Запускаем sendData каждые 50 секунд
+setInterval(sendData, 50000);
+//Порт на котором работает сервер
+
 
 //Запускаем сервер
 app.listen(PORT, () => {
