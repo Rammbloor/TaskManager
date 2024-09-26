@@ -35,7 +35,7 @@ class TasksManager {
         }
     }
 
-    addTask(taskOptions) {
+    addTask(taskOptions,userId) {
         while (this.tasks.hasOwnProperty(this.nextId)) {
             this.nextId++;
         }
