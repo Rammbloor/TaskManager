@@ -1,4 +1,4 @@
-const {newUserRegister, userManager} = require("../usersControllers/newUserRegister");
+const {newUserRegister, userManager} = require("./newUserRegister");
 
 async function deleteUser(req, res) {
     const {id} = req.params;//получаем ид из параметров запроса

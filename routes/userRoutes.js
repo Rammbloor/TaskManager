@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const loginUser = require('../auth/authControllers/loginUser');
-const changePassword = require('../auth/usersControllers/userChangePassword');
-const {newUserRegister} = require('../auth/usersControllers/newUserRegister');
-const getUserList = require('../auth/usersControllers/getUserList')
+const changePassword = require('../users/usersControllers/userChangePassword');
+const {newUserRegister} = require('../users/usersControllers/newUserRegister');
+const getUserList = require('../users/usersControllers/getUserList')
 const authenticateToken = require("../auth/authenticateToken");
-const deleteUser= require('../auth/usersControllers/deleteUser');
+const deleteUser= require('../users/usersControllers/deleteUser');
 
 
 router.post("/register",newUserRegister);

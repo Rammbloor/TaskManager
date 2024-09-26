@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const {newUserRegister, userManager} = require("../usersControllers/newUserRegister");
-require("../mapper");
+const {newUserRegister, userManager} = require("../../users/usersControllers/newUserRegister");
+require("../../users/mapper");
 
 
 async function loginUser(req, res) {
@@ -16,7 +16,7 @@ async function loginUser(req, res) {
             return res.status(400).json({message: 'Неверный логин или пароль'})
         }
 
-        const token = jwt.sign({name,login, id}, 'RamPamPam', {expiresIn: '1h'});
+        const token = jwt.sign({name,login, id}, 'RamPamPam', {expiresIn: '3h'});
         res.status(200).json({token});
     } catch (err) {
         res.status(400).json({message: err.message})
