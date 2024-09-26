@@ -46,6 +46,7 @@ class UserManager {
             if (data && data.users) {
                 for (const [login, userData] of Object.entries(data.users)) {
                     this.users[login] = new Users(userData); // Создаем экземпляр Users для каждого пользователя
+                    this.nextId = Math.max(this.nextId, userData.id + 1); // Обновляем nextId, если id текущего пользователя больше
                 }
             }
         }
@@ -61,11 +62,12 @@ class UserManager {
             this.nextId++;
         }
         // Создаем экземпляр пользователя
-        const user = new Users({id: this.nextId++, ...userOptions})
+        const user = new Users({ ...userOptions, id: this.nextId });
         await user.hashPassword(); // Хешируем пароль
-        this.users[user.id] = user; // Сохраняем пользователя в "базе данных"
+        this.users[user.login] = user; // Сохраняем пользователя в "базе данных"
+        this.nextId++
         this.saveUsers()//Сохраняем юзера в файл
-        return user
+
     }
 
     // Проверка существования пользователя по логину
@@ -79,11 +81,15 @@ class UserManager {
     }
 
     deleteUser(id) {
-
-        delete this.users[id]
-        this.saveUsers()
-        return !this.users.hasOwnProperty(id);
+        const user = Object.values(this.users).find(u => u.id === id);
+        if (user) {
+            delete this.users[user.login];
+            this.saveUsers();
+            return true;
+        }
+        return false;
     }
+
 
 
     // Проверка логина и пароля пользователя
