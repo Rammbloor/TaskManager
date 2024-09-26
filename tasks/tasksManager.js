@@ -39,14 +39,14 @@ class TasksManager {
         while (this.tasks.hasOwnProperty(this.nextId)) {
             this.nextId++;
         }
-        const task = new Task({id: this.nextId++, ...taskOptions})
-        this.tasks[task.id] = task
-        this.saveTask()//Сохраняем задачу в файл
-        return task
+        const task = new Task({ id: this.nextId++, ...taskOptions, owner: userId });
+        this.tasks[task.id] = task;
+        this.saveTask();
+        return task;
     }
 
-    getAllTasks() {
-        return Object.values(this.tasks)
+    getAllTasks(userId) {
+        return Object.values(this.tasks).filter(task => task.owner === userId);
     }
 
     getTasksById(id) {
