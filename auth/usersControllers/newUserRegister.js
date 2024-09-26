@@ -4,15 +4,15 @@ const newMapper = require("../mapper");
 const userManager = new UserManager(); // Создаем экземпляр класса UserManager
 
 async function newUserRegister(req, res) {
-    const { name, id, login, password } = req.body;
+    const { name,  login, password } = req.body;
 
     // Проверяем, что все необходимые данные переданы
-    if (!name || !id || !login || !password) {
+    if (!name  || !login || !password) {
         return res.status(400).json({ message: 'Укажите все необходимые данные' });
     }
 
     try {
-        await userManager.addUser({ name, id, login, password });
+        await userManager.addUser({ name,  login, password });
         const userInfo = userManager.getUser(login);
         const response = new newMapper(userInfo);
         res.send(response);
