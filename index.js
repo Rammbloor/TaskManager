@@ -2,7 +2,11 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 app.use(express.json());// включаем обработку JSON
-app.use(cors());// Разрешить все запросы
+app.use(cors({
+    origin: 'https://example.com', // Разрешить только этот домен
+    methods: ['GET', 'POST','DELETE','PUSH'],      // Разрешить только определенные методы
+    credentials: true              // Разрешить использование учетных данных
+}));
 
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes');
@@ -38,8 +42,8 @@ function sendData() {
         });
 }
 
-// Запускаем sendData каждые 50 секунд
-setInterval(sendData, 50000);
+
+setInterval(sendData, 49000);
 //Порт на котором работает сервер
 
 
