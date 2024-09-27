@@ -5,16 +5,23 @@ class CommentManager {
     async addComment(commentOptions, userId, taskId) {
         const { content } = commentOptions;
 
-        const [comment] = await sql`
-            INSERT INTO comments (content, author, task_id) VALUES (${content}, ${userId}, ${taskId}) RETURNING *;
-        `;
 
-        return comment; // Вернем добавленный комментарий
+        try {
+            const [comment] = await sql`
+                INSERT INTO comments (content, author, task_id) 
+                VALUES (${content}, ${userId}, ${taskId}) 
+                RETURNING *;
+            `;
+
+
+            return comment; // Вернем добавленный комментарий
+        } catch (error) {
+            console.error('Ошибка при добавлении комментария в базу данных:', error);
+            throw error;
+        }
     }
-
-    // Метод для получения всех комментариев к задаче
     async getCommentsByTaskId(taskId) {
-        return await sql`
+        return sql`
             SELECT * FROM comments WHERE task_id = ${taskId};
         `; // Вернем массив комментариев
     }

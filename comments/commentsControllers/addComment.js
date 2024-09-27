@@ -1,8 +1,11 @@
 const commentManager = require("../commentsManager");
 
 async function addComment(req, res) {
-    const { taskId } = req.params;
+    const { id: taskId } = req.params;
     const { author, text } = req.body;
+
+
+
 
     if (!author || !text) {
         return res.status(400).json({ message: 'Пожалуйста, укажите автора и текст комментария.' });

@@ -9,6 +9,7 @@ const deleteComment = require('../comments/commentsControllers/deleteComment');
 router.post('/:tasks/:id/comments', authenticateToken, addComment);
 
 
+
 router.get('/:tasks/:id/comments', authenticateToken, getAllComments);
 
 // Удаление комментария по ID

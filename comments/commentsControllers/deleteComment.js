@@ -1,7 +1,7 @@
 const commentManager = require("../commentsManager");
 
 async function deleteComment(req, res) {
-    const { id } = req.params;
+    const { id: id } = req.params;
 
     try {
         const isDeleted = await commentManager.deleteComment(id); // Добавлено await
