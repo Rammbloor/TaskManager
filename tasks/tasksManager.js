@@ -27,11 +27,10 @@ class TaskManager {
         return task; // Вернем задачу или undefined
     }
 
-    // Метод для удаления задачи
     async deleteTask(id) {
         const { count } = await sql`
-            DELETE FROM tasks WHERE id = ${id} RETURNING count(*);
-        `;
+        DELETE FROM tasks WHERE id = ${id} RETURNING id;
+    `;
         return count > 0; // Вернем true, если задача была удалена
     }
 }
