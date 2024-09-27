@@ -9,7 +9,7 @@ async function addComment(req, res) {
     }
 
     try {
-        const comment = await commentManager.addComment({ taskId, author, text }); // Добавлено await
+        const comment = await commentManager.addComment({ content: text }, req.user.id, taskId);
         res.status(201).json({ message: 'Комментарий добавлен.', comment });
     } catch (err) {
         res.status(500).json({ message: 'Ошибка при добавлении комментария', err });
