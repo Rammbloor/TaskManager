@@ -6,9 +6,9 @@ async function getTasksBuId(req, res) {
         return res.status(400).json({message: 'Необходимо указать id задачи'});
     }
     try {
-        const task = taskManager.getTasksById(Number(id))
-        if (task == null) {
-            res.status(200).json({message: `Задача по id ${id} отсутствует`});
+        const task = await taskManager.getTaskById(Number(id))
+        if (!task) {
+            res.status(404).json({message: `Задача по id ${id} отсутствует`});
         } else {
             res.status(200).json({message: `Задача по id ${id} успешно показана`, task});
         }

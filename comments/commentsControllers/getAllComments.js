@@ -1,10 +1,14 @@
 const commentManager = require("../commentsManager");
 
-
 async function getAllComments(req, res) {
     const { taskId } = req.params;
-    const comments = commentManager.getCommentsByTaskId(taskId);
-    res.status(200).json({ message: 'Комментарии получены.', comments });
+
+    try {
+        const comments = await commentManager.getCommentsByTaskId(taskId); // Добавлено await
+        res.status(200).json({ message: 'Комментарии получены.', comments });
+    } catch (err) {
+        res.status(500).json({ message: 'Ошибка при получении комментариев', err });
+    }
 }
 
 module.exports = getAllComments;

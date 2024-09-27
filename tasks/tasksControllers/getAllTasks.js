@@ -4,11 +4,11 @@ async function getAllTasks(req, res) {
     const userId = req.user.id;
 
     try {
-        const tasks = taskManager.getAllTasks(userId);
-        res.status(200).json({message: 'Задачи пользователя', tasks});
+        const tasks = await taskManager.getAllTasks(userId); // Добавлено await
+        res.status(200).json({ message: 'Задачи пользователя', tasks });
     } catch (err) {
-        res.status(500).json({message: 'Ошибка при получении задач', err});
+        res.status(500).json({ message: 'Ошибка при получении задач', error: err.message });
     }
 }
 
-module.exports = getAllTasks
+module.exports = getAllTasks;

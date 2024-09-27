@@ -1,55 +1,30 @@
-const fs = require('fs');
-const path = require('path');
-
-class Comment {
-    constructor({ id, taskId, author, text, date }) {
-        this.id = id;
-        this.taskId = taskId;
-        this.author = author;
-        this.text = text;
-        this.date = date || new Date().toISOString(); //добавим дату комментария
-    }
-}
+const sql = require('../dataBase'); // Путь к вашему файлу базы данных
 
 class CommentManager {
-    constructor() {
-        this.comments = {}; // Объект для хранения комментариев
-        this.nextId = 1; // Счетчик для уникальных ID комментариев
-        this.filePath = path.join(__dirname, 'comments.json'); // Путь к файлу для сохранения комментариев
-        this.loadComments(); // Загружаем комментарии из файла при запуске
+    // Метод для добавления нового комментария
+    async addComment(commentOptions, userId, taskId) {
+        const { content } = commentOptions;
+
+        const [comment] = await sql`
+            INSERT INTO comments (content, author, task_id) VALUES (${content}, ${userId}, ${taskId}) RETURNING *;
+        `;
+
+        return comment; // Вернем добавленный комментарий
     }
 
-
-    saveComments() {
-        fs.writeFileSync(this.filePath, JSON.stringify({ nextId: this.nextId, comments: this.comments }, null, 2), 'utf-8');
-    }
-    loadComments() {
-        if (fs.existsSync(this.filePath)) {
-            const data = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
-            this.comments = data.comments;
-            this.nextId = data.nextId;
-        }
-    }
-    addComment(commentOptions) {
-        while (this.comments.hasOwnProperty(this.nextId)) {
-            this.nextId++;
-        }
-        const comment = new Comment({ id: this.nextId++, ...commentOptions });
-        this.comments[comment.id] = comment;
-        this.saveComments();
-        return comment;
+    // Метод для получения всех комментариев к задаче
+    async getCommentsByTaskId(taskId) {
+        return await sql`
+            SELECT * FROM comments WHERE task_id = ${taskId};
+        `; // Вернем массив комментариев
     }
 
-    getCommentsByTaskId(taskId) {
-        return Object.values(this.comments).filter(comment => comment.taskId === taskId);
-    }
-    deleteComment(id) {
-        if (id < this.nextId) {
-            this.nextId = id;
-        }
-        delete this.comments[id];
-        this.saveComments();
-        return !this.comments.hasOwnProperty(id);
+    // Метод для удаления комментария
+    async deleteComment(id) {
+        const { count } = await sql`
+            DELETE FROM comments WHERE id = ${id} RETURNING count(*);
+        `;
+        return count > 0; // Вернем true, если комментарий был удален
     }
 }
 

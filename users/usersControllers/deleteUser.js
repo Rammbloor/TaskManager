@@ -7,7 +7,7 @@ async function deleteUser(req, res) {
         return res.status(400).json({message: 'Необходимо указать id удаляемого пользователя'});
     }
     try {
-        userManager.deleteUser(id);
+        await userManager.deleteUser(id);
         res.status(200).json({message: `Пользователь по id ${id} успешно удален`});
     } catch (err) {
         res.status(500).json({message: 'Ошибка при удалении пользователя', err})

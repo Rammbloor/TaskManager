@@ -2,11 +2,16 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 app.use(express.json());// включаем обработку JSON
-app.use(cors({
-    origin: 'https://example.com', // Разрешить только этот домен
-    methods: ['GET', 'POST','DELETE','PUSH'],      // Разрешить только определенные методы
-    credentials: true              // Разрешить использование учетных данных
-}));
+
+const corsOptions = {
+    origin: [
+        "http://localhost:3000",
+        "https://localhost:3000",
+    ],
+    credentials: true,
+};
+app.use(cors(corsOptions))
+
 
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes');

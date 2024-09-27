@@ -1,7 +1,7 @@
-const {User,UserManager} = require("../userManager");
+const userManager= require("../userManager");
 const newMapper = require("../mapper");
 
-const userManager = new UserManager(); // Создаем экземпляр класса UserManager
+// Создаем экземпляр класса UserManager
 
 async function newUserRegister(req, res) {
     const { name,  login, password } = req.body;

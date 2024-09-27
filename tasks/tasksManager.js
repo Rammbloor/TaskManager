@@ -1,71 +1,39 @@
-const fs = require('fs');
-const path = require('path');
+const sql = require('../dataBase'); // Путь к вашему файлу базы данных
 
+class TaskManager {
+    // Метод для добавления новой задачи
+    async addTask(taskOptions, userId) {
+        const { title, description, status = 'pending' } = taskOptions;
 
-class Task {
-    constructor({id, title, description, status, owner}) {
-        this.id = id;
-        this.title = title
-        this.description = description
-        this.status = status || 'pending'// Статус задачи по умолчанию
-        this.owner = owner;
+        const [task] = await sql`
+            INSERT INTO tasks (title, description, status, author) VALUES (${title}, ${description}, ${status}, ${userId}) RETURNING *;
+        `;
+
+        return task; // Вернем добавленную задачу
+    }
+
+    // Метод для получения всех задач для пользователя
+    async getAllTasks(userId) {
+        return await sql`
+            SELECT * FROM tasks WHERE author = ${userId};
+        `; // Вернем массив задач
+    }
+
+    // Метод для получения задачи по ID
+    async getTaskById(id) {
+        const [task] = await sql`
+            SELECT * FROM tasks WHERE id = ${id};
+        `;
+        return task; // Вернем задачу или undefined
+    }
+
+    // Метод для удаления задачи
+    async deleteTask(id) {
+        const { count } = await sql`
+            DELETE FROM tasks WHERE id = ${id} RETURNING count(*);
+        `;
+        return count > 0; // Вернем true, если задача была удалена
     }
 }
 
-
-class TasksManager {
-    constructor() {
-        this.tasks = {}; // Сохраняем задачи в виде объекта
-        this.nextId = 1; // Счетчик для задания уникальных ID задач
-        this.filePath = path.join(__dirname, 'tasks.json')// файл для хранения задач
-        this.loadTasks()//загружаем задачи из файла при запуске
-    }
-
-//Метод для сохранения задач в файл
-    saveTask() {
-        fs.writeFileSync(this.filePath, JSON.stringify({nextId: this.nextId, tasks: this.tasks}, null, 2), 'utf-8')
-    }
-
-//Метод для загрузки задач из файла
-    loadTasks() {
-        if (fs.existsSync(this.filePath)) {
-            const data = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
-            this.tasks = data.tasks;
-            this.nextId = data.nextId;
-        }
-    }
-
-    addTask(taskOptions,userId) {
-        while (this.tasks.hasOwnProperty(this.nextId)) {
-            this.nextId++;
-        }
-        const task = new Task({ id: this.nextId++, ...taskOptions, owner: userId });
-        this.tasks[task.id] = task;
-        this.saveTask();
-        return task;
-    }
-
-    getAllTasks(userId) {
-        return Object.values(this.tasks).filter(task => task.owner === userId);
-    }
-
-    getTasksById(id) {
-
-        const task = this.tasks[id];
-        if (!task) {
-            return null;
-        }
-        return task;
-    }
-
-    deleteTask(id) {
-        if (id < this.nextId) {
-            this.nextId = id;
-        }
-        delete this.tasks[id]
-        this.saveTask()
-        return !this.tasks.hasOwnProperty(id);
-    }
-}
-
-module.exports = new TasksManager()
+module.exports = new TaskManager();
