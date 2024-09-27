@@ -24,15 +24,3 @@ async function getPgVersion() {
 getPgVersion()
 
 
-// require("dotenv").config();
-// const { Pool } = require("pg");
-//
-// const pool = new Pool({
-//     connectionString: process.env.DATABASE_URL,
-//     ssl: {
-//         require: true,
-//         rejectUnauthorized: false // Если возникнут ошибки SSL
-//     }
-// });
-// console.log(process.env.DATABASE_URL)
-// module.exports = pool;
