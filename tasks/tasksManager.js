@@ -14,7 +14,7 @@ class TaskManager {
 
     // Метод для получения всех задач для пользователя
     async getAllTasks(userId) {
-        return await sql`
+        return sql`
             SELECT * FROM tasks WHERE author = ${userId};
         `; // Вернем массив задач
     }

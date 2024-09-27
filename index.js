@@ -5,6 +5,7 @@ app.use(express.json());// включаем обработку JSON
 
 const corsOptions = {
     origin: [
+        "https://falsea3.github.io/rep/rambltask",
         "https://taskmanager-ynh7.onrender.com",
         "http://localhost:3000",
         "https://localhost:3000",
