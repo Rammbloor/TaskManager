@@ -1,7 +1,7 @@
 const taskManager = require("../tasksManager");
 
 async function deleteTasks(req, res) {
-    const { id } = req.params; // получаем id из параметров запроса
+    const { id:id } = req.params; // получаем id из параметров запроса
 
     if (!id) {
         return res.status(400).json({ message: 'Необходимо указать id удаляемой задачи' });
