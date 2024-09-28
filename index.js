@@ -7,6 +7,7 @@ const corsOptions = {
     origin: [
         "https://falsea3.github.io",
         "https://taskmanager-ynh7.onrender.com",
+        "http://localhost:8080/",
         "http://localhost:3000",
         "https://localhost:3000",
     ],
