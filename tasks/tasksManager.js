@@ -18,7 +18,20 @@ class TaskManager {
             SELECT * FROM tasks WHERE author = ${userId};
         `; // Вернем массив задач
     }
+    async updateTask(id, taskData) {
+        const { title, description } = taskData; // Извлекаем данные для обновления
 
+        // Обновление задачи в базе данных
+        const [updatedTask] = await sql`
+            UPDATE tasks
+            SET title = COALESCE(${title}, title), 
+                description = COALESCE(${description}, description) 
+            WHERE id = ${id} 
+            RETURNING *;
+        `;
+
+        return updatedTask; // Вернем обновленную задачу
+    }
     // Метод для получения задачи по ID
     async getTaskById(id) {
         const [task] = await sql`

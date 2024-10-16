@@ -1,6 +1,6 @@
 const taskManager = require("../tasksManager");
 
-async function createTasks(req, res) {
+async function createTask(req, res) {
     const { title, description } = req.body;
     const userId = req.user.id;
 
@@ -16,4 +16,6 @@ async function createTasks(req, res) {
     }
 }
 
-module.exports = createTasks;
+
+
+module.exports = createTask;

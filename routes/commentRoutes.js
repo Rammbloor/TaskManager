@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const authenticateToken = require("../auth/authenticateToken");
-const addComment = require('../comments/commentsControllers/addComment');
-const getAllComments = require('../comments/commentsControllers/getAllComments');
-const deleteComment = require('../comments/commentsControllers/deleteComment');
+const createComment= require('../comments/commentsControllers/createComment');
+const getCommentsByTaskId =  require('../comments/commentsControllers/getCommentByTaskId');
+const deleteComment = require("../comments/commentsControllers/deleteComment");
+const updateComment =require("../comments/commentsControllers/updateComment");
+// Добавление нового комментария к задаче
+router.post('/:tasks/:id/comments', authenticateToken, createComment);
 
+// Получение всех комментариев по ID задачи
+router.get('/:tasks/:id/comments', authenticateToken, getCommentsByTaskId);
 
-router.post('/:tasks/:id/comments', authenticateToken, addComment);
+// Обновление комментария по ID (доступ для администраторов и владельцев комментария)
+router.put('/comments/:commentId', authenticateToken, updateComment);
 
-
-
-router.get('/:tasks/:id/comments', authenticateToken, getAllComments);
-
-// Удаление комментария по ID
-router.delete('/:tasks/:id/comments/:id', authenticateToken, deleteComment,);
+// Удаление комментария по ID (доступ для администраторов и владельцев комментария)
+router.delete('/comments/:commentId', authenticateToken, deleteComment);
 
 module.exports = router;

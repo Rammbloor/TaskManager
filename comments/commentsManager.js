@@ -20,10 +20,26 @@ class CommentManager {
             throw error;
         }
     }
+    //обновление комментариев
+    async updateComment(id, commentData) {
+        const { content } = commentData; // Извлекаем данные для обновления
+
+        // Обновление комментария в базе данных
+        const [updatedComment] = await sql`
+            UPDATE comments
+            SET content = COALESCE(${content}, content)
+            WHERE id = ${id}
+            RETURNING *;
+        `;
+
+        return updatedComment; // Вернем обновленный комментарий
+    }
+
     async getCommentsByTaskId(taskId) {
-        return sql`
+        const comments = await sql`
             SELECT * FROM comments WHERE task_id = ${taskId};
-        `; // Вернем массив комментариев
+        `;
+        return comments; // Вернем массив комментариев
     }
 
     // Метод для удаления комментария

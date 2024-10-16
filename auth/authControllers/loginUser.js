@@ -1,29 +1,34 @@
 const jwt = require("jsonwebtoken");
-const { userManager } = require("../../users/usersControllers/newUserRegister");
+const {userManager} = require("../users/usersControllers/newUserRegister");
 
 async function loginUser(req, res) {
-    const { login, password } = req.body;
+    const {login, password} = req.body;
 
     if (!login || !password) {
-        return res.status(400).json({ message: 'Укажите логин и пароль' });
+        return res.status(400).json({message: 'Укажите логин и пароль'});
     }
 
     try {
         const user = await userManager.getUser(login); // Получаем пользователя один раз
 
         if (!user) {
-            return res.status(400).json({ message: 'Неверный логин или пароль' });
+            return res.status(400).json({message: 'Неверный логин или пароль'});
         }
 
         const isValidUser = await userManager.validateUser(login, password);
         if (!isValidUser) {
-            return res.status(400).json({ message: 'Неверный логин или пароль' });
+            return res.status(400).json({message: 'Неверный логин или пароль'});
         }
 
-        const token = jwt.sign({ name: user.name, login, id: user.id }, 'RamPamPam', { expiresIn: '3h' });
-        res.status(200).json({ token });
+        const token = jwt.sign({
+            name: user.name,
+            login: user.login,
+            id: user.id,
+            role: user.role
+        }, 'RamPamPam', {expiresIn: '3h'});
+        res.status(200).json({token});
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(400).json({message: err.message});
     }
 }
 
