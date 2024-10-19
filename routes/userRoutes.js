@@ -4,11 +4,15 @@ const changePassword = require('../auth/users/usersControllers/userChangePasswor
 const { newUserRegister } = require('../auth/users/usersControllers/newUserRegister');
 const authenticateToken = require("../auth/authenticateToken");
 const deleteUser = require('../auth/users/usersControllers/deleteUser');
-
-const updateUser = require('../auth/users/usersControllers/updateUser'); // Импортируем контроллер для обновления пользователя
+const updateUser = require('../auth/users/usersControllers/updateUser');
+const getAuthUser = require("../auth/authControllers/getAuthUser");
 
 // Регистрация нового пользователя
 router.post("/register", newUserRegister);
+
+
+//Получение информации об авторизованном пользователе
+router.get("/check",authenticateToken, getAuthUser);
 
 // Изменение пароля (доступ для всех пользователей)
 router.post("/changePassword", authenticateToken, changePassword);
